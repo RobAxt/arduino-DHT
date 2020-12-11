@@ -204,3 +204,22 @@ void DHT::readSensor()
 
   error = ERROR_NONE;
 }
+
+float DHT::getDewPoint()
+{
+	// reference: http://wahiduddin.net/calc/density_algorithms.htm
+  readSensor();
+  if(error == ERROR_NONE) {
+	  double A0 = 373.15 / (273.15 + (double)temperature);
+	  double SUM = -7.90298 * (A0 - 1);
+	  SUM += 5.02808 * log10(A0);
+	  SUM += -1.3816e-7 * (pow(10, (11.344 * (1 - 1 / A0))) - 1);
+	  SUM += 8.1328e-3 * (pow(10, (-3.49149 * (A0 - 1))) - 1);
+	  SUM += log10(1013.246);
+	  double VP = pow(10, SUM - 3) * (double)humidity;
+	  double Td = log(VP / 0.61078); // temp var
+	  Td = (241.88 * Td) / (17.558 - Td);
+    return Td;
+  }
+	return NAN;
+}

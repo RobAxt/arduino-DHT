@@ -60,6 +60,7 @@ public:
 
   float getTemperature();
   float getHumidity();
+  float getDewPoint();
 
   DHT_ERROR_t getStatus() { return error; };
   const char* getStatusString();
